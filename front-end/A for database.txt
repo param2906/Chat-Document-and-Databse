@@ -1,0 +1,57 @@
+Retrieve all records from the "customer" table.
+sql
+Copy code
+SELECT * FROM customer;
+Find the total number of customers in the "customer" table.
+sql
+Copy code
+SELECT COUNT(*) FROM customer;
+List the unique film categories available in the "film" table.
+sql
+Copy code
+SELECT DISTINCT category FROM film;
+Display the names of customers who have rented a film in the last 30 days.
+sql
+Copy code
+SELECT DISTINCT c.first_name, c.last_name
+FROM customer c
+INNER JOIN rental r ON c.customer_id = r.customer_id
+WHERE r.rental_date >= CURRENT_DATE - INTERVAL '30 days';
+Calculate the average rental duration of all films in the "film" table.
+sql
+Copy code
+SELECT AVG(rental_duration) FROM film;
+Find the film title(s) with the highest replacement cost.
+sql
+Copy code
+SELECT title
+FROM film
+WHERE replacement_cost = (SELECT MAX(replacement_cost) FROM film);
+List the top 5 customers with the highest total rental payments.
+sql
+Copy code
+SELECT c.first_name, c.last_name, SUM(p.amount) AS total_payments
+FROM customer c
+INNER JOIN payment p ON c.customer_id = p.customer_id
+GROUP BY c.first_name, c.last_name
+ORDER BY total_payments DESC
+LIMIT 5;
+Find the actors who have appeared in at least 20 different films.
+sql
+Copy code
+SELECT a.first_name, a.last_name
+FROM actor a
+INNER JOIN film_actor fa ON a.actor_id = fa.actor_id
+GROUP BY a.first_name, a.last_name
+HAVING COUNT(DISTINCT fa.film_id) >= 20;
+
+List films that have not been rented in the last 90 days.
+sql
+Copy code
+SELECT title
+FROM film
+WHERE film_id NOT IN (
+  SELECT DISTINCT r.film_id
+  FROM rental r
+  WHERE r.rental_date >= CURRENT_DATE - INTERVAL '90 days'
+);

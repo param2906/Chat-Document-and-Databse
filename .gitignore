@@ -1,0 +1,7 @@
+/chatgpt
+/backend/.env
+/backend/node_modules
+/backend/uploads
+/backend/vectorestore
+/backend/database
+
